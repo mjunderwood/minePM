@@ -12,10 +12,10 @@ def updateDBdata(cancer):
 		handle = Entrez.esearch(db="pubmed", term="bladder cancer", retmax=10000)
 		collection = db.bladdercancer
 	elif(cancer == "lung"):
-		handle = Entrez.esearch(db="pubmed", term="lung cancer")
+		handle = Entrez.esearch(db="pubmed", term="lung cancer", retmax=10000)
 		collection = db.lungcancer
 	elif(cancer == "prostate"):
-		handle = Entrez.esearch(db="pubmed", term="prostate cancer")
+		handle = Entrez.esearch(db="pubmed", term="prostate cancer",retmax=10000)
 		collection = db.prostatecancer	
 	
 	record = Entrez.read(handle)
@@ -44,7 +44,7 @@ def updateDBdata(cancer):
 
 
 def main():
-	updateDBdata("bladder")
+	updateDBdata("prostate")
 	
 	
 
