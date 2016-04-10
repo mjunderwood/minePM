@@ -1,7 +1,4 @@
-import xml.etree.ElementTree as ET
-import re
-import csv
-import string
+import re, csv,string
 from pymongo import MongoClient
 
 def extractGeneData(cancer,gene_dict):
@@ -17,9 +14,13 @@ def extractGeneData(cancer,gene_dict):
         collection = db.lungcancer.find()
     elif(cancer == "prostate"):
     	collection = db.prostatecancer.find()
+    elif(cancer == "colon"):
+	collection = db.coloncancer.find()
+    elif(cancer == "pancreatic"):
+	collection = db.pancreaticcancer.find()
     for x in collection:
     	abs =  x['ab']
-	abs = abs[0]
+	abs = " ".join(abs)
  	abs = abs.split(" ")		
 	abs = set(abs)
 	abs = map(lambda s: s.encode('ascii','ignore').upper(),abs)
@@ -56,7 +57,7 @@ def returnGeneList():
         return genesym
 
 def writecsv(data):
-    csvfile = "./matrix-test.csv"
+    csvfile = "./matrix.csv"
     with open(csvfile, "w") as output:
       writer = csv.writer(output, lineterminator='\n')
       writer.writerows(data)
@@ -76,20 +77,22 @@ def row_find_init():
 	for i in range(0,len(gene)):
 		row_find[str(gene[i])] = 0
 	return row_find
-
-
     
 def main():
     # Define Matrix (col)(row)
     #39825
-    Matrix = [[ x for x in range(7)] for x in range(39808)]
+    Matrix = [[ x for x in range(11)] for x in range(39808)]
     Matrix[0][0] = "GeneSymbol"
-    Matrix[0][1] = "BladderCount"
-    Matrix[0][2] = "LungCount"
-    Matrix[0][3] = "ProstateCount"
-    Matrix[0][4] = "BladderArticles"
-    Matrix[0][5] = "LungArticles"
-    Matrix[0][6] = "ProstateArticles"
+    Matrix[0][1] = "BladderCancer"
+    Matrix[0][2] = "LungCancer"
+    Matrix[0][3] = "ProstateCancer"
+    Matrix[0][4] = "ColonCancer"
+    Matrix[0][5] = "PancreaticCancer"
+    Matrix[0][6] = "BladderArticles"
+    Matrix[0][7] = "LungArticles"
+    Matrix[0][8] = "ProstateArticles"
+    Matrix[0][9] = "ColonArticles"
+    Matrix[0][10] = "PancArticles"
 
     #ADD dict for row capture
     #change range of GENE LIST
@@ -105,11 +108,11 @@ def main():
       if(value[0] >= 1): 
         Matrix[count][0] = key
         Matrix[count][1] = value[0]
-        Matrix[count][4] =",".join(value[1:])
+        Matrix[count][6] =",".join(value[1:])
       else:
         Matrix[count][0] = key
         Matrix[count][1] = 0
-        Matrix[count][4] = "NA"
+        Matrix[count][6] = "NA"
   
     gene_dict = reset_dict()
     lung =  extractGeneData("lung",gene_dict)
@@ -117,21 +120,39 @@ def main():
         count = row_find[key]
 	if(value[0] >=1):
  		Matrix[count][2] = value[0]
-		Matrix[count][5] = ",".join(value[1:])
+		Matrix[count][7] = ",".join(value[1:])
 	else:
 		Matrix[count][2] = 0
-		Matrix[count][5] = "NA"
+		Matrix[count][7] = "NA"
     gene_dict = reset_dict()
     prostate = extractGeneData("prostate",gene_dict)
     for key,value in prostate.iteritems():   
         count = row_find[key]
 	if(value[0] >= 1):
 		Matrix[count][3] = value[0]
-		Matrix[count][6] = ",".join(value[1:])
+		Matrix[count][8] = ",".join(value[1:])
 	else:
 		Matrix[count][3] = 0
-		Matrix[count][6] = "NA"    
-
+		Matrix[count][8] = "NA"    
+    gene_dict = reset_dict()
+    colon  = extractGeneData("colon",gene_dict)
+    for key,value in colon.iteritems():   
+        count = row_find[key]
+	if(value[0] >= 1):
+		Matrix[count][4] = value[0]
+		Matrix[count][9] = ",".join(value[1:])
+	else:
+		Matrix[count][4] = 0
+		Matrix[count][9] = "NA"
+    panc  = extractGeneData("pancreatic",gene_dict)
+    for key,value in panc.iteritems():   
+        count = row_find[key]
+	if(value[0] >= 1):
+		Matrix[count][5] = value[0]
+		Matrix[count][10] = ",".join(value[1:])
+	else:
+		Matrix[count][5] = 0
+		Matrix[count][10] = "NA"
     writecsv(Matrix)
     print "Data analyzed and written to matrix-test.csv"
 
