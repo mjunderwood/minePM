@@ -19,15 +19,16 @@ def extractGeneData(cancer,gene_dict):
     elif(cancer == "pancreatic"):
 	collection = db.pancreaticcancer.find()
     for x in collection:
-    	abs =  x['ab']
-	abs = " ".join(abs)
- 	abs = abs.split(" ")		
-	abs = set(abs)
-	abs = map(lambda s: s.encode('ascii','ignore').upper(),abs)
-	abs = map(lambda s: s.strip(string.punctuation),abs)
+    	abst =  x['ab']
+	abst = " ".join(abst)
+ 	abst = abst.split(" ")
+	abst = map(lambda s: s.encode('ascii','ignore').upper(),abst)
+	abst = map(lambda s: s.strip(string.punctuation),abst)		
+	abst = set(abst)
+	abst = map(lambda s: s,abst)
 	pmid = x["pmid"].encode('ascii','ignore')
-	for i in range(0,len(abs)):
-		word = abs[i].strip()
+	for i in range(0,len(abst)):
+		word = abst[i].strip()
 		#print word
     		try:
           		valueMatch = gene_dict[word]	
@@ -35,8 +36,7 @@ def extractGeneData(cancer,gene_dict):
                         	valueMatch[0] = valueMatch[0] + 1
            			valueMatch.append(pmid)
 		 		gene_dict[word] = valueMatch
-			else:
-				print "found"
+			else:	
 				newlist = []
 				newlist.append(1)
 				newlist.append(pmid)
@@ -81,7 +81,7 @@ def row_find_init():
 def main():
     # Define Matrix (col)(row)
     #39825
-    Matrix = [[ x for x in range(11)] for x in range(39808)]
+    Matrix = [[ x for x in range(11)] for x in range(39805)]
     Matrix[0][0] = "GeneSymbol"
     Matrix[0][1] = "BladderCancer"
     Matrix[0][2] = "LungCancer"
