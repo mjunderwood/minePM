@@ -14,6 +14,19 @@ idlist = record["IdList"]
 #end = start + 201
 # can do below for each id 
 # get handle which is handle to url
+
+
+#######################################
+# Fetching Data Update August 13, 2016
+# 
+# Get Articles from last N days from when last running this old script
+# Write cron job to run script every N days
+# Automate Job to run through each cancer type
+#
+#
+#
+
+
 fileNum = 1
 end = len(idlist) + 200
 #end = 22601

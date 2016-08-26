@@ -3,7 +3,19 @@ from Bio import Entrez
 from pymongo import MongoClient
 from Bio import Medline
 import logging
-import os
+import os,sys
+
+
+######################################
+# Updates August 13,2016 LOADING
+# 
+# After loading the files from old script
+# 	-> Modify to check each folder for new data
+#	-> If folders are empty move on, else load the new data
+#	
+#
+#
+
 
 def updateDBdata(cancer):
 	client = MongoClient('mongodb://localhost:27017/')
@@ -30,20 +42,26 @@ def updateDBdata(cancer):
 		records = Entrez.parse(handle)	
 		for x in records:	
 			try:
-			
+				abstract = x['MedlineCitation']['Article']['Abstract']['AbstractText']
+				abstract = "".join(abstract)
 				pmid = x['MedlineCitation']['PMID']
 				title = x['MedlineCitation']['Article']['ArticleTitle']
-				abstract = x['MedlineCitation']['Article']['Abstract']['AbstractText']
-				item  = {"pmid": pmid,"title":title,"ab": abstract}
-				collection.insert(item)
 				
-			
+				
+				author = []
+				for z in x['MedlineCitation']['Article']['AuthorList']:
+					try:
+						auth = z['LastName'] + " " + z['Initials']
+						author.append(auth)
+					except Exception,e:
+						continue
+				author.sort()
+				authors = " , ".join(author)	
+				item  = {"pmid": pmid,"title":title,"ab": abstract,"authors":authors}
+				collection.insert(item)
 			except Exception,e:
 				continue
 	        handle.close()
-
-
-
 	client.close()
 
 

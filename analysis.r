@@ -12,7 +12,10 @@ data = data.frame(data[data$BladderCancer>=3 & data$LungCancer >=3 & data$Prosta
 #################################################################
 # Creating dataframe of sum counts
 data.sum = apply(data[,2:6],1,sum) #Sum total Amounts
+o = order(data.sum)
 data.match = data.frame(data[,1],data.sum) # match genename with total counts
+o = order(data.match[,2],decreasing=TRUE)
+View(data[o,1:6])
 #data.top = subset(data.match,data.match[,1] >=3) # subset the data to greater than sum 3
 colnames(data.match) <- c("GeneSymbol","TotalCount")
 #################################################################
@@ -34,8 +37,11 @@ data.top.sorted = data.match[order(data.match[,2],data.match[,1],decreasing=TRUE
 top.25.genes = data.top.sorted[1:10,1]
 m = match(top.25.genes, data[,1])
 res.new = data[m,2:6]
+res.new.h = data[m,1:6]
 # vector articles with at least 1 gene
-res = t(t(data[m,2:6])/g1.articles) # scale the data by column
+res = t(t(data[m,2:6])/g1.articles)
+res.h = t(t(data[m,2:6])/g1.articles)# scale the data by column
+heatmap(res.h,col = colorRampPalette(c("green","red"))(100)) # heatmap
 d <- dist(res, method = "euclidean") # distance matrix
 fit <- hclust(d, method="ward.D2") 
 plot(fit,labels = data[m,1]) # display dendogram
@@ -50,7 +56,6 @@ plot.clust <-function(x) {
   h = hclust(d)
   plot(h)
 }
-
 res.c <- t(t(data[,2:6])/g1.articles) #Scale the data by columns
 res.c = res.c / rowSums(res.c) # Scale by row
 #CLuster shows which cancer types are most similar
@@ -69,7 +74,7 @@ prct.genes = sums.col / g1.articles
 barplot(prct.genes,xlab = "Tumor Type", ylab="Frequency (Integer)",
         col =c("red","green","blue","orange","yellow"),main ="Frequency of Genes Per Abstracts Across Tumor Types")
 legend("topright",legend=colnames(data[,2:6]),fill = c("red","green","blue","orange","yellow"),lty)
-11############################################3
+############################################3
 
 #CHI SQUARE TEST
 
