@@ -5,7 +5,7 @@ from Bio import Medline
 
 email = "underwoodmi@my.easternct.edu"
 bladderCancer = "bladder cancer"
-pancreaticCaner = "pancreatic cancer"
+pancreaticCancer = "pancreatic cancer"
 lungCancer = "lung cancer"
 
 getCancerData(bladderCancer , "bladder.txt", email)
