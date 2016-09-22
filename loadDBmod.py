@@ -24,23 +24,15 @@ def getCancerData(searchTerm , filename, email) :
 
     records = list(records) #all pmids are in this list
 
-    count = 1
     for record in records:
-
-	#print record
-
-	print "Article #", count
-	print "PMID: ", record.get("PMID", "?") 
-        print "title:", record.get("TI", "?")
-        print "authors:", record.get("AU", "?")           #writes the title, author, 
-        print "source:", record.get("SO", "?")           #source and abstract to a file
-	
+	s = ", "
+	authors = s.join(record.get("AU", "?"))
 	count = count + 1
         f.write("PMID: " + record.get("PMID", "?"))
-        f.write("title: " + record.get("TI", "?"))
-        f.write("authors: " + record.get("AU", "?"))            #writes the title, author, 
-        f.write("source: " + record.get("SO", "?"))           #source and abstract to a file
-        f.write("abstract: " + record.get("AB", "?"))
+        f.write("Title: " + record.get("TI", "?"))
+        f.write("Authors: " + authors)                        #writes the title, author, 
+        f.write("Source: " + record.get("SO", "?"))           #source and abstract to a file
+        f.write("Abstract: " + record.get("AB", "?"))
         
     handle.close()
     f.close()
