@@ -12,7 +12,7 @@ def getCancerData(searchTerm , filename, email) :
 
  
     retmax = row["Count"]
-    retmax = 200 
+    retmax = 300000 
 
     handle = Entrez.esearch(db="pubmed", term = searchTerm, retmax=retmax)
     record = Entrez.read(handle)
