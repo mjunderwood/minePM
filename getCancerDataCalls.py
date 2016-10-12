@@ -1,4 +1,4 @@
-execfile("loadDBMod.py")
+execfile("loadDBMod edit.py")
 from Bio import Entrez
 from Bio import Medline
 
