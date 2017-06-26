@@ -1,3 +1,4 @@
+#This function puts all the approved gene symbols into list to be used in Match Genes file 
 
 getGeneList <- function(){
   
@@ -10,7 +11,7 @@ listNum = 1
 i = 1
 while (i < length(Approved.Symbols)) {
   start = i
-  end = i + 2499
+  end = i + 2499                               #Grep function can only handle 2500 at one time
   
   if (end > length(Approved.Symbols)) {
     end = length(Approved.Symbols)
