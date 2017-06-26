@@ -1,4 +1,4 @@
-
+#Combines file from loadDBmod edit file.
 
 getArticleList <-function(cancerType){
 
